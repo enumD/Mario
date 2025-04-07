@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "android",
+            "request": "launch",
+            "name": "Launch App",
+            "package": "com.example.mario",
+            "activity": "com.example.mario.MainActivity",
+            "adbPort": 5037
+        }
+    ]
+}
