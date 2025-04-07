@@ -1,0 +1,16 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Installa e avvia con debug",
+            "type": "shell",
+            "command": "./gradlew clean installDebug ",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Installa l'app, la avvia, collega il debugger in automatico"
+        }
+    ]
+}

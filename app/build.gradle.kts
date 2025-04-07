@@ -26,6 +26,11 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            // La modalità debug è abilitata automaticamente
+             isDebuggable = true
+            isMinifyEnabled = false
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

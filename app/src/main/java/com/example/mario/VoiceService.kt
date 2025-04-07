@@ -40,9 +40,12 @@ class VoiceService : Service() {
         // Start foreground service
         val notification = createNotification()
 
+
+
         startForeground(1, notification.build())
     }
 
+ 
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun startVoiceRecognition()
@@ -62,9 +65,19 @@ class VoiceService : Service() {
 
     private fun playBeep()
     {
-        mediaPlayer?.release()
-        mediaPlayer = MediaPlayer.create(this, R.raw.beep)
-        mediaPlayer?.start()
+
+        MediaPlayer.create(this, R.raw.beep)?.apply{
+            start()
+            setOnCompletionListener {
+                release() // Rilascia il MediaPlayer dopo la riproduzione
+            }
+        }
+
+        // Old but gold
+        // mediaPlayer?.release()
+        // mediaPlayer = MediaPlayer.create(this, R.raw.beep)
+        // mediaPlayer?.start()
+        // mediaPlayer?.release()
     }
 
     private fun vibrate(duration: Long)
@@ -103,17 +116,30 @@ class VoiceService : Service() {
     }
 
 
-    class MediaSessionCallback(private val voiceService: VoiceService) : MediaSessionCompat.Callback() {
-        override fun onMediaButtonEvent(mediaButtonIntent: Intent?): Boolean {
-            val keyEvent = mediaButtonIntent?.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT)
-            if (keyEvent?.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && keyEvent.action == KeyEvent.ACTION_DOWN) {
+    class MediaSessionCallback(private val voiceService: VoiceService) : MediaSessionCompat.Callback() 
+    {
+        override fun onMediaButtonEvent(mediaButtonIntent: Intent?): Boolean 
+        {
+            val keyEvent = mediaButtonIntent?.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT, KeyEvent::class.java)
+
+            if (keyEvent?.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && keyEvent.action == KeyEvent.ACTION_DOWN) 
+            {
                 Log.d("VoiceService", "Volume Down premuto — avvio riconoscimento vocale")
                 voiceService.logToUI("Volume Down premuto — avvio riconoscimento vocale")
                 voiceService.vibrate(500)
                 voiceService.playBeep()
                 voiceService.startVoiceRecognition()
             }
+
             return super.onMediaButtonEvent(mediaButtonIntent)
         }
+
+   
+        
     }
+
+
+
+
+
 }
